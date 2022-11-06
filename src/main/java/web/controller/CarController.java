@@ -1,18 +1,26 @@
 package web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import web.service.CarService;
 
+
 @Controller
 public class CarController {
 
+    private CarService carsService;
+
+    @Autowired
+    CarController(CarService carsService) {
+        this.carsService = carsService;
+    }
+
     @GetMapping("/cars")
     public String getCarsList(@RequestParam(value = "count", defaultValue = "5") int count, Model model) {
-        CarService carService = new CarService();
-        model.addAttribute("cars", carService.getCarList(count));
+        model.addAttribute("cars", carsService.getCars(count));
         return "cars-list";
     }
 
